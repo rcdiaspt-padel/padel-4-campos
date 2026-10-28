@@ -27,7 +27,7 @@
   </style>
 </head>
 <body>
-<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.2</div></header>
+<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.3</div></header>
 <main class="wrap">
   <section id="setup" class="page">
     <div class="card"><h2>Configuração</h2><div class="grid2"><div><label>Hora de início</label><input id="startTime" type="time" value="18:30"></div><div><label>Duração do jogo</label><select id="duration"><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option></select></div></div><label>Intervalo para troca</label><select id="breakTime"><option value="3">3 min</option><option value="5">5 min</option></select></div>
@@ -54,24 +54,34 @@ function gameStatus(g){
   if(Number(g.sa)===Number(g.sb)&&!winner(g))return'Falta confirmar o ponto de ouro';
   const w=winner(g);return w?`Vencedor ${w}${Number(g.sa)===Number(g.sb)?' · ponto de ouro':''}`:'Por concluir';
 }
-function setScore(r,c,k,v){
-  const g=state.rounds[r]&&state.rounds[r][c];
+function setScore(roundIndex,courtIndex,key,value){
+  const g=state.rounds[roundIndex]&&state.rounds[roundIndex][courtIndex];
   if(!g)return;
-  g[k]=v;
-  if((k==='sa'||k==='sb')&&validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)!==Number(g.sb))g.tb='';
+  g[key]=value;
+  if((key==='sa'||key==='sb')&&validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)!==Number(g.sb))g.tb='';
   save();
-  if(state.current===r)renderRound();
+  if(state.current===roundIndex)renderRound();
+  renderRanking();
+}
+function chooseGold(roundIndex,courtIndex,team){
+  const g=state.rounds[roundIndex]&&state.rounds[roundIndex][courtIndex];
+  if(!g||!validScore(g.sa)||!validScore(g.sb)||Number(g.sa)!==Number(g.sb))return;
+  g.tb=team;
+  save();
+  renderRound();
   renderRanking();
 }
 function renderAll(){renderTabs();renderRound();renderRanking()}
 function renderTabs(){roundTabs.innerHTML=state.rounds.map((_,i)=>`<button class="tab ${i===state.current?'on':''}" onclick="state.current=${i};save();renderAll()">Ronda ${i+1}</button>`).join('')}
 function renderRound(){
   if(!state.rounds.length){courts.innerHTML='<div class="card"><p class="note">Prepare e inicie o torneio.</p></div>';roundInfo.innerHTML='<b>Torneio ainda não iniciado</b>';nextBtn.disabled=true;return}
-  const end=timeFor(state.current).split(':').map(Number);let total=end[0]*60+end[1]+state.config.duration;
-  roundInfo.innerHTML=`<div class="row"><div><b>Ronda ${state.current+1} de 5</b><div class="note">${timeFor(state.current)}–${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}</div></div><div class="badge">4 campos</div></div>`;
-  courts.innerHTML=state.rounds[state.current].map((g,i)=>{
+  const roundIndex=state.current;
+  const end=timeFor(roundIndex).split(':').map(Number);let total=end[0]*60+end[1]+state.config.duration;
+  roundInfo.innerHTML=`<div class="row"><div><b>Ronda ${roundIndex+1} de 5</b><div class="note">${timeFor(roundIndex)}–${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}</div></div><div class="badge">4 campos</div></div>`;
+  courts.innerHTML=state.rounds[roundIndex].map((g,i)=>{
     const tied=validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)===Number(g.sb);
-    return `<div class="court"><div class="court-head"><b>Campo ${g.court}</b><span class="badge">${gameStatus(g)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(g.A[0])}</span><span>${esc(g.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(g.B[0])}</span><span>${esc(g.B[1])}</span></div></div><div class="score"><input type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${g.sa}" oninput="setScore(${state.current},${i},'sa',this.value)"><input type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${g.sb}" oninput="setScore(${state.current},${i},'sb',this.value)"></div>${tied?`<label>Vencedor do ponto de ouro</label><select onchange="setScore(${state.current},${i},'tb',this.value)"><option value="">Selecionar vencedor</option><option value="A" ${g.tb==='A'?'selected':''}>Equipa A — ${esc(g.A.join(' / '))}</option><option value="B" ${g.tb==='B'?'selected':''}>Equipa B — ${esc(g.B.join(' / '))}</option></select><p class="note">O resultado mantém-se ${g.sa}–${g.sb}; a escolha atribui a vitória e uma VPO aos dois jogadores vencedores.</p>`:''}</div>`
+    const gold=tied?`<div class="gold"><label>Vencedor do ponto de ouro</label><div class="grid2"><button type="button" class="${g.tb==='A'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${i},'A')">Equipa A<br><small>${esc(g.A.join(' / '))}</small></button><button type="button" class="${g.tb==='B'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${i},'B')">Equipa B<br><small>${esc(g.B.join(' / '))}</small></button></div><p class="note">Seleção atual: ${g.tb?`Equipa ${g.tb}`:'nenhuma'}. O resultado mantém-se ${g.sa}–${g.sb}.</p></div>`:'';
+    return `<div class="court"><div class="court-head"><b>Campo ${g.court}</b><span class="badge">${gameStatus(g)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(g.A[0])}</span><span>${esc(g.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(g.B[0])}</span><span>${esc(g.B[1])}</span></div></div><div class="score"><input type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${g.sa}" onchange="setScore(${roundIndex},${i},'sa',this.value)"><input type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${g.sb}" onchange="setScore(${roundIndex},${i},'sb',this.value)"></div>${gold}</div>`
   }).join('');
   updateNext();
 }
@@ -81,7 +91,7 @@ function updateNext(){
   nextBtn.disabled=pending.length>0;
   nextBtn.textContent=pending.length?`Ronda por concluir · ${pending.length} campo${pending.length===1?'':'s'}`:state.current===4?'Torneio concluído':state.current<state.rounds.length-1?'Abrir ronda seguinte':'Concluir ronda e gerar a seguinte';
 }
-function advanceRound(){if(!state.rounds[state.current].every(winner)){const faltam=state.rounds[state.current].filter(g=>!winner(g)).map(g=>`Campo ${g.court}: ${gameStatus(g)}`).join('\n');alert(`Não é possível concluir a ronda ${state.current+1}:\n${faltam}`);return;}if(state.current===4){showPage('ranking');return}if(state.rounds[state.current+1]){state.current++;save();renderAll();return}const r=state.rounds[state.current],up=[],down=[];r.forEach(g=>{const w=winner(g);up.push(w==='A'?g.A:g.B);down.push(w==='A'?g.B:g.A)});const groups=[[up[0],up[1]],[down[0],up[2]],[down[1],up[3]],[down[2],down[3]]];const nr=groups.map((x,i)=>({court:i+1,A:[x[0][0],x[1][0]],B:[x[0][1],x[1][1]],sa:'',sb:'',tb:''}));state.rounds.push(nr);state.current++;save();renderAll()}
+function advanceRound(){if(!state.rounds[state.current].every(winner)){const faltam=state.rounds[state.current].filter(g=>!winner(g)).map(g=>`Campo ${g.court}: ${gameStatus(g)}`).join('\n');alert(`Ronda ${state.current+1} por concluir:\n${faltam}`);return;}if(state.current===4){showPage('ranking');return}if(state.rounds[state.current+1]){state.current++;save();renderAll();return}const r=state.rounds[state.current],up=[],down=[];r.forEach(g=>{const w=winner(g);up.push(w==='A'?g.A:g.B);down.push(w==='A'?g.B:g.A)});const groups=[[up[0],up[1]],[down[0],up[2]],[down[1],up[3]],[down[2],down[3]]];const nr=groups.map((x,i)=>({court:i+1,A:[x[0][0],x[1][0]],B:[x[0][1],x[1][1]],sa:'',sb:'',tb:''}));state.rounds.push(nr);state.current++;save();renderAll()}
 function renderRanking(){
   const stats=Object.fromEntries(state.players.map(p=>[p,{p,g:0,w:0,vpo:0,l:0,pf:0,pa:0,c:4}]));
   state.rounds.forEach(r=>r.forEach(g=>{
@@ -96,6 +106,6 @@ function renderRanking(){
 }
 function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.page===id));if(id==='games'&&!state.rounds.length)showPage('setup')}
 function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:defaultPlayers,rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').then(r=>r.update());init();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=13').then(r=>r.update());init();
 </script>
 </body></html>
