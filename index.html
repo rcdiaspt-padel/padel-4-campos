@@ -24,10 +24,17 @@
     .teams{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.team{padding:10px;background:#f5f7fb;border-radius:12px;min-height:64px}.team b{display:block;font-size:12px;margin-bottom:4px}.team span{font-size:14px;display:block}.vs{font-size:12px;color:var(--muted);font-weight:800}.score{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.score input{text-align:center;font-weight:800;font-size:20px}
     .rank{display:grid;grid-template-columns:34px 1fr 44px 52px 62px;gap:7px;align-items:center;padding:10px 2px;border-bottom:1px solid #edf1f6;font-size:14px}.rank.head{font-size:11px;color:var(--muted);font-weight:800}.pos{font-weight:900}.hidden{display:none}.note{font-size:12px;color:var(--muted);line-height:1.45}.ok{color:#2c6900;font-weight:700}.warn{color:#8a4b00;font-weight:700}
     nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dfe6ef;display:grid;grid-template-columns:repeat(3,1fr);padding:7px 6px calc(7px + env(safe-area-inset-bottom));z-index:3}nav button{background:white;color:var(--muted);padding:8px 4px;font-size:12px}nav button.on{color:var(--navy)}nav .ico{display:block;font-size:20px;margin-bottom:2px}
+  
+    .timerbox{margin-top:12px;padding:14px;border-radius:16px;background:#071a3a;color:#fff;text-align:center}
+    .timerlabel{font-size:12px;opacity:.8;font-weight:750;text-transform:uppercase;letter-spacing:.05em}
+    .timerclock{font-size:42px;line-height:1.1;font-weight:850;font-variant-numeric:tabular-nums;margin:6px 0}
+    .timerclock.warning{color:#ffd166}.timerclock.finished{color:#ff8a80}
+    .timeractions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.timeractions button{padding:10px 8px}
+    .timerhint{font-size:12px;opacity:.8;margin-top:6px}
   </style>
 </head>
 <body>
-<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.3</div></header>
+<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.7</div></header>
 <main class="wrap">
   <section id="setup" class="page">
     <div class="card"><h2>Configuração</h2><div class="grid2"><div><label>Hora de início</label><input id="startTime" type="time" value="18:30"></div><div><label>Duração do jogo</label><select id="duration"><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option></select></div></div><label>Intervalo para troca</label><select id="breakTime"><option value="3">3 min</option><option value="5">5 min</option></select></div>
@@ -45,8 +52,8 @@ function save(){localStorage.setItem('padel4',JSON.stringify(state))}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function timeFor(r){let [h,m]=state.config.start.split(':').map(Number);m+=r*(state.config.duration+state.config.break);h=(h+Math.floor(m/60))%24;m%=60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`}
-function init(){state.rounds.forEach(r=>r.forEach(g=>{if(!Object.prototype.hasOwnProperty.call(g,'tb'))g.tb=''}));save();document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
-function startTournament(){state.players=[...document.querySelectorAll('#playerInputs input')].map(x=>x.value.trim()).filter(Boolean);if(state.players.length!==16||new Set(state.players.map(x=>x.toLowerCase())).size!==16){alert('Introduza 16 nomes diferentes.');return}state.config={start:startTime.value||'18:30',duration:+duration.value,break:+breakTime.value};const p=shuffle(state.players);state.rounds=[Array.from({length:4},(_,c)=>({court:c+1,A:[p[c*4],p[c*4+1]],B:[p[c*4+2],p[c*4+3]],sa:'',sb:'',tb:''}))];state.current=0;save();showPage('games');renderAll()}
+function init(){state.rounds.forEach(r=>r.forEach(g=>{if(!Object.prototype.hasOwnProperty.call(g,'tb'))g.tb=''}));if(!state.timers)state.timers={};save();startTimerLoop();document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
+function startTournament(){state.players=[...document.querySelectorAll('#playerInputs input')].map(x=>x.value.trim()).filter(Boolean);if(state.players.length!==16||new Set(state.players.map(x=>x.toLowerCase())).size!==16){alert('Introduza 16 nomes diferentes.');return}state.config={start:startTime.value||'18:30',duration:+duration.value,break:+breakTime.value};const p=shuffle(state.players);state.timers={};state.rounds=[Array.from({length:4},(_,c)=>({court:c+1,A:[p[c*4],p[c*4+1]],B:[p[c*4+2],p[c*4+3]],sa:'',sb:'',tb:''}))];state.current=0;save();showPage('games');renderAll()}
 function validScore(v){return v!==''&&Number.isInteger(Number(v))&&Number(v)>=0}
 function winner(g){if(!validScore(g.sa)||!validScore(g.sb))return null;const a=Number(g.sa),b=Number(g.sb);if(a>b)return'A';if(b>a)return'B';return g.tb==='A'||g.tb==='B'?g.tb:null}
 function gameStatus(g){
@@ -71,19 +78,74 @@ function chooseGold(roundIndex,courtIndex,team){
   renderRound();
   renderRanking();
 }
+let timerLoop=null;
+function gameSeconds(){return Math.max(60,Number(state.config.duration||15)*60)}
+function getTimer(roundIndex){
+  if(!state.timers)state.timers={};
+  if(!state.timers[roundIndex])state.timers[roundIndex]={remaining:gameSeconds(),endAt:null,running:false,finished:false,lastGameAlerted:false};if(state.timers[roundIndex].lastGameAlerted===undefined)state.timers[roundIndex].lastGameAlerted=false;
+  return state.timers[roundIndex];
+}
+function timerRemaining(roundIndex){
+  const t=getTimer(roundIndex);
+  if(t.running&&t.endAt)return Math.max(0,Math.ceil((t.endAt-Date.now())/1000));
+  return Math.max(0,Number(t.remaining??gameSeconds()));
+}
+function formatTimer(sec){const m=Math.floor(sec/60),r=sec%60;return `${String(m).padStart(2,'0')}:${String(r).padStart(2,'0')}`}
+function startRoundTimer(roundIndex){
+  ensureAudio();
+  const t=getTimer(roundIndex);let left=timerRemaining(roundIndex);
+  if(left<=0)left=gameSeconds();
+  t.remaining=left;t.endAt=Date.now()+left*1000;t.running=true;t.finished=false;if(left>240)t.lastGameAlerted=false;save();renderTimer(roundIndex);
+}
+function pauseRoundTimer(roundIndex){const t=getTimer(roundIndex);t.remaining=timerRemaining(roundIndex);t.endAt=null;t.running=false;save();renderTimer(roundIndex)}
+function resetRoundTimer(roundIndex){state.timers[roundIndex]={remaining:gameSeconds(),endAt:null,running:false,finished:false,lastGameAlerted:false};save();renderTimer(roundIndex)}
+let audioCtx=null;
+function ensureAudio(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}catch(e){}}
+function beep(freq=880,duration=.25,volume=.16,delay=0){
+  try{ensureAudio();if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain(),t=audioCtx.currentTime+delay;o.connect(g);g.connect(audioCtx.destination);o.frequency.value=freq;g.gain.setValueAtTime(volume,t);g.gain.exponentialRampToValueAtTime(.001,t+duration);o.start(t);o.stop(t+duration)}catch(e){}
+}
+function testSound(){
+  ensureAudio();
+  beep(1040,.32,.20,0);beep(1040,.32,.20,.48);beep(1320,.55,.22,.96);
+  if(navigator.vibrate)navigator.vibrate([250,140,250,140,450]);
+}
+function lastGameAlert(roundIndex){
+  const t=getTimer(roundIndex);if(t.lastGameAlerted)return;t.lastGameAlerted=true;save();
+  beep(1040,.32,.20,0);beep(1040,.32,.20,.48);beep(1320,.55,.22,.96);
+  if(navigator.vibrate)navigator.vibrate([250,140,250,140,450]);
+}
+function finishTimer(roundIndex){
+  const t=getTimer(roundIndex);if(t.finished)return;
+  t.remaining=0;t.endAt=null;t.running=false;t.finished=true;save();
+  if(navigator.vibrate)navigator.vibrate([400,180,400]);
+  beep(700,.7,.20,0);beep(520,.9,.20,.8);
+}
+function renderTimer(roundIndex){
+  const el=document.getElementById('roundTimer');if(!el||state.current!==roundIndex)return;
+  const t=getTimer(roundIndex),left=timerRemaining(roundIndex);
+  if(t.running&&left<=0)finishTimer(roundIndex);
+  const current=getTimer(roundIndex),sec=timerRemaining(roundIndex);
+  if(current.running&&sec<=240&&sec>0&&!current.lastGameAlerted)lastGameAlert(roundIndex);
+  const clock=document.getElementById('timerClock'),status=document.getElementById('timerStatus'),start=document.getElementById('timerStart');
+  if(clock){clock.textContent=formatTimer(sec);clock.className='timerclock '+(sec===0?'finished':sec<=60?'warning':'')}
+  if(status)status.textContent=sec===0?'Fim dos 15 min · 3 min para resultado e mudança de campo':current.running&&sec<=240?'ALERTA · último jogo':current.running?'Jogo em curso':sec===gameSeconds()?'Pronto para iniciar':'Cronómetro em pausa';
+  if(start){start.textContent=current.running?'Em curso':'Iniciar';start.disabled=current.running}
+}
+function startTimerLoop(){if(timerLoop)return;timerLoop=setInterval(()=>{if(state.rounds.length)renderTimer(state.current)},250)}
 function renderAll(){renderTabs();renderRound();renderRanking()}
 function renderTabs(){roundTabs.innerHTML=state.rounds.map((_,i)=>`<button class="tab ${i===state.current?'on':''}" onclick="state.current=${i};save();renderAll()">Ronda ${i+1}</button>`).join('')}
 function renderRound(){
   if(!state.rounds.length){courts.innerHTML='<div class="card"><p class="note">Prepare e inicie o torneio.</p></div>';roundInfo.innerHTML='<b>Torneio ainda não iniciado</b>';nextBtn.disabled=true;return}
   const roundIndex=state.current;
   const end=timeFor(roundIndex).split(':').map(Number);let total=end[0]*60+end[1]+state.config.duration;
-  roundInfo.innerHTML=`<div class="row"><div><b>Ronda ${roundIndex+1} de 5</b><div class="note">${timeFor(roundIndex)}–${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}</div></div><div class="badge">4 campos</div></div>`;
+  roundInfo.innerHTML=`<div class="row"><div><b>Ronda ${roundIndex+1} de 5</b><div class="note">${timeFor(roundIndex)}–${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}</div></div><div class="badge">4 campos</div></div><div class="timerbox" id="roundTimer"><div class="timerlabel" id="timerStatus">Pronto para iniciar</div><div class="timerclock" id="timerClock">${formatTimer(timerRemaining(roundIndex))}</div><div class="timerhint">Jogo: ${Number(state.config.duration||15)} min · alerta sonoro aos 4 min finais (último jogo) · depois 3 min para mudança</div><div class="timeractions"><button id="timerStart" class="primary" type="button" onclick="startRoundTimer(${roundIndex})">Iniciar</button><button class="secondary" type="button" onclick="pauseRoundTimer(${roundIndex})">Pausa</button><button class="danger" type="button" onclick="resetRoundTimer(${roundIndex})">Repor</button><button class="secondary" type="button" onclick="testSound()">🔊 Testar som</button></div></div>`;
   courts.innerHTML=state.rounds[roundIndex].map((g,i)=>{
     const tied=validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)===Number(g.sb);
     const gold=tied?`<div class="gold"><label>Vencedor do ponto de ouro</label><div class="grid2"><button type="button" class="${g.tb==='A'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${i},'A')">Equipa A<br><small>${esc(g.A.join(' / '))}</small></button><button type="button" class="${g.tb==='B'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${i},'B')">Equipa B<br><small>${esc(g.B.join(' / '))}</small></button></div><p class="note">Seleção atual: ${g.tb?`Equipa ${g.tb}`:'nenhuma'}. O resultado mantém-se ${g.sa}–${g.sb}.</p></div>`:'';
     return `<div class="court"><div class="court-head"><b>Campo ${g.court}</b><span class="badge">${gameStatus(g)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(g.A[0])}</span><span>${esc(g.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(g.B[0])}</span><span>${esc(g.B[1])}</span></div></div><div class="score"><input type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${g.sa}" onchange="setScore(${roundIndex},${i},'sa',this.value)"><input type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${g.sb}" onchange="setScore(${roundIndex},${i},'sb',this.value)"></div>${gold}</div>`
   }).join('');
   updateNext();
+  renderTimer(roundIndex);
 }
 function updateNext(){
   if(!state.rounds.length)return;
@@ -105,7 +167,7 @@ function renderRanking(){
   rankingList.innerHTML=arr.map((s,i)=>`<div class="rank"><span class="pos">${i+1}</span><span>${esc(s.p)}<small class="note"> ${s.g}/5 jogos</small></span><b>${s.w}</b><b>${s.vpo}</b><span>${s.pf-s.pa>0?'+':''}${s.pf-s.pa}</span></div>`).join('');
 }
 function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.page===id));if(id==='games'&&!state.rounds.length)showPage('setup')}
-function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:defaultPlayers,rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=13').then(r=>r.update());init();
+function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:defaultPlayers,rounds:[],timers:{},current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=17').then(r=>r.update());init();
 </script>
 </body></html>
