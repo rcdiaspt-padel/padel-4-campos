@@ -27,7 +27,7 @@
   </style>
 </head>
 <body>
-<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas</div></header>
+<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.2</div></header>
 <main class="wrap">
   <section id="setup" class="page">
     <div class="card"><h2>Configuração</h2><div class="grid2"><div><label>Hora de início</label><input id="startTime" type="time" value="18:30"></div><div><label>Duração do jogo</label><select id="duration"><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option></select></div></div><label>Intervalo para troca</label><select id="breakTime"><option value="3">3 min</option><option value="5">5 min</option></select></div>
@@ -45,7 +45,7 @@ function save(){localStorage.setItem('padel4',JSON.stringify(state))}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function timeFor(r){let [h,m]=state.config.start.split(':').map(Number);m+=r*(state.config.duration+state.config.break);h=(h+Math.floor(m/60))%24;m%=60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`}
-function init(){document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
+function init(){state.rounds.forEach(r=>r.forEach(g=>{if(!Object.prototype.hasOwnProperty.call(g,'tb'))g.tb=''}));save();document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
 function startTournament(){state.players=[...document.querySelectorAll('#playerInputs input')].map(x=>x.value.trim()).filter(Boolean);if(state.players.length!==16||new Set(state.players.map(x=>x.toLowerCase())).size!==16){alert('Introduza 16 nomes diferentes.');return}state.config={start:startTime.value||'18:30',duration:+duration.value,break:+breakTime.value};const p=shuffle(state.players);state.rounds=[Array.from({length:4},(_,c)=>({court:c+1,A:[p[c*4],p[c*4+1]],B:[p[c*4+2],p[c*4+3]],sa:'',sb:'',tb:''}))];state.current=0;save();showPage('games');renderAll()}
 function validScore(v){return v!==''&&Number.isInteger(Number(v))&&Number(v)>=0}
 function winner(g){if(!validScore(g.sa)||!validScore(g.sb))return null;const a=Number(g.sa),b=Number(g.sb);if(a>b)return'A';if(b>a)return'B';return g.tb==='A'||g.tb==='B'?g.tb:null}
@@ -54,11 +54,14 @@ function gameStatus(g){
   if(Number(g.sa)===Number(g.sb)&&!winner(g))return'Falta confirmar o ponto de ouro';
   const w=winner(g);return w?`Vencedor ${w}${Number(g.sa)===Number(g.sb)?' · ponto de ouro':''}`:'Por concluir';
 }
-function setScore(c,k,v){
-  const g=state.rounds[state.current][c];
+function setScore(r,c,k,v){
+  const g=state.rounds[r]&&state.rounds[r][c];
+  if(!g)return;
   g[k]=v;
   if((k==='sa'||k==='sb')&&validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)!==Number(g.sb))g.tb='';
-  save();renderRound();renderRanking();
+  save();
+  if(state.current===r)renderRound();
+  renderRanking();
 }
 function renderAll(){renderTabs();renderRound();renderRanking()}
 function renderTabs(){roundTabs.innerHTML=state.rounds.map((_,i)=>`<button class="tab ${i===state.current?'on':''}" onclick="state.current=${i};save();renderAll()">Ronda ${i+1}</button>`).join('')}
@@ -68,7 +71,7 @@ function renderRound(){
   roundInfo.innerHTML=`<div class="row"><div><b>Ronda ${state.current+1} de 5</b><div class="note">${timeFor(state.current)}–${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}</div></div><div class="badge">4 campos</div></div>`;
   courts.innerHTML=state.rounds[state.current].map((g,i)=>{
     const tied=validScore(g.sa)&&validScore(g.sb)&&Number(g.sa)===Number(g.sb);
-    return `<div class="court"><div class="court-head"><b>Campo ${g.court}</b><span class="badge">${gameStatus(g)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(g.A[0])}</span><span>${esc(g.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(g.B[0])}</span><span>${esc(g.B[1])}</span></div></div><div class="score"><input type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${g.sa}" onchange="setScore(${i},'sa',this.value)"><input type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${g.sb}" onchange="setScore(${i},'sb',this.value)"></div>${tied?`<label>Vencedor do ponto de ouro</label><select onchange="setScore(${i},'tb',this.value)"><option value="">Selecionar vencedor</option><option value="A" ${g.tb==='A'?'selected':''}>Equipa A — ${esc(g.A.join(' / '))}</option><option value="B" ${g.tb==='B'?'selected':''}>Equipa B — ${esc(g.B.join(' / '))}</option></select><p class="note">O resultado mantém-se ${g.sa}–${g.sb}; a escolha atribui a vitória e uma VPO aos dois jogadores vencedores.</p>`:''}</div>`
+    return `<div class="court"><div class="court-head"><b>Campo ${g.court}</b><span class="badge">${gameStatus(g)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(g.A[0])}</span><span>${esc(g.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(g.B[0])}</span><span>${esc(g.B[1])}</span></div></div><div class="score"><input type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${g.sa}" oninput="setScore(${state.current},${i},'sa',this.value)"><input type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${g.sb}" oninput="setScore(${state.current},${i},'sb',this.value)"></div>${tied?`<label>Vencedor do ponto de ouro</label><select onchange="setScore(${state.current},${i},'tb',this.value)"><option value="">Selecionar vencedor</option><option value="A" ${g.tb==='A'?'selected':''}>Equipa A — ${esc(g.A.join(' / '))}</option><option value="B" ${g.tb==='B'?'selected':''}>Equipa B — ${esc(g.B.join(' / '))}</option></select><p class="note">O resultado mantém-se ${g.sa}–${g.sb}; a escolha atribui a vitória e uma VPO aos dois jogadores vencedores.</p>`:''}</div>`
   }).join('');
   updateNext();
 }
@@ -78,7 +81,7 @@ function updateNext(){
   nextBtn.disabled=pending.length>0;
   nextBtn.textContent=pending.length?`Ronda por concluir · ${pending.length} campo${pending.length===1?'':'s'}`:state.current===4?'Torneio concluído':state.current<state.rounds.length-1?'Abrir ronda seguinte':'Concluir ronda e gerar a seguinte';
 }
-function advanceRound(){if(!state.rounds[state.current].every(winner))return;if(state.current===4){showPage('ranking');return}if(state.rounds[state.current+1]){state.current++;save();renderAll();return}const r=state.rounds[state.current],up=[],down=[];r.forEach(g=>{const w=winner(g);up.push(w==='A'?g.A:g.B);down.push(w==='A'?g.B:g.A)});const groups=[[up[0],up[1]],[down[0],up[2]],[down[1],up[3]],[down[2],down[3]]];const nr=groups.map((x,i)=>({court:i+1,A:[x[0][0],x[1][0]],B:[x[0][1],x[1][1]],sa:'',sb:'',tb:''}));state.rounds.push(nr);state.current++;save();renderAll()}
+function advanceRound(){if(!state.rounds[state.current].every(winner)){const faltam=state.rounds[state.current].filter(g=>!winner(g)).map(g=>`Campo ${g.court}: ${gameStatus(g)}`).join('\n');alert(`Não é possível concluir a ronda ${state.current+1}:\n${faltam}`);return;}if(state.current===4){showPage('ranking');return}if(state.rounds[state.current+1]){state.current++;save();renderAll();return}const r=state.rounds[state.current],up=[],down=[];r.forEach(g=>{const w=winner(g);up.push(w==='A'?g.A:g.B);down.push(w==='A'?g.B:g.A)});const groups=[[up[0],up[1]],[down[0],up[2]],[down[1],up[3]],[down[2],down[3]]];const nr=groups.map((x,i)=>({court:i+1,A:[x[0][0],x[1][0]],B:[x[0][1],x[1][1]],sa:'',sb:'',tb:''}));state.rounds.push(nr);state.current++;save();renderAll()}
 function renderRanking(){
   const stats=Object.fromEntries(state.players.map(p=>[p,{p,g:0,w:0,vpo:0,l:0,pf:0,pa:0,c:4}]));
   state.rounds.forEach(r=>r.forEach(g=>{
@@ -93,6 +96,6 @@ function renderRanking(){
 }
 function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.page===id));if(id==='games'&&!state.rounds.length)showPage('setup')}
 function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:defaultPlayers,rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
-if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');init();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').then(r=>r.update());init();
 </script>
 </body></html>
