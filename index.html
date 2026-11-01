@@ -46,7 +46,7 @@
 </main>
 <nav><button data-page="setup" class="on" onclick="showPage('setup')"><span class="ico">⚙️</span>Preparar</button><button data-page="games" onclick="showPage('games')"><span class="ico">🎾</span>Jogos</button><button data-page="ranking" onclick="showPage('ranking')"><span class="ico">🏆</span>Classificação</button></nav>
 <script>
-const defaultPlayers=['António','Rui','Vasco','Maria',...Array.from({length:12},(_,i)=>`Jogador ${i+5}`)];
+const defaultPlayers=[Array.from({length:16},(_,i)=>`Jogador ${i+2}`)];
 let state=JSON.parse(localStorage.getItem('padel4')||'null')||{players:defaultPlayers,rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};
 function save(){localStorage.setItem('padel4',JSON.stringify(state))}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
