@@ -34,10 +34,10 @@
   </style>
 </head>
 <body>
-<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.7</div></header>
+<header><h1>Padel Sobe e Desce</h1><div class="sub">4 campos · 16 jogadores · 5 rondas · v1.8</div></header>
 <main class="wrap">
   <section id="setup" class="page">
-    <div class="card"><h2>Configuração</h2><div class="grid2"><div><label>Hora de início</label><input id="startTime" type="time" value="18:30"></div><div><label>Duração do jogo</label><select id="duration"><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option></select></div></div><label>Intervalo para troca</label><select id="breakTime"><option value="3">3 min</option><option value="5">5 min</option></select></div>
+    <div class="card"><h2>Configuração</h2><div class="grid2"><div><label>Hora de início</label><input id="startTime" type="time" value="18:30"></div><div><label>Duração do jogo</label><select id="duration"><option value="15">15 min</option><option value="20">20 min</option><option value="25">25 min</option></select></div></div><label>Intervalo para troca</label><select id="breakTime"><option value="3">3 min</option><option value="5">5 min</option></select><div class="note" style="margin-top:12px"><b>Hora prevista de fim do torneio:</b> <span id="expectedEnd">--:--</span></div></div>
     <div class="card"><h2>Inscrições</h2><p class="note">Edite os 16 nomes. O sorteio inicial distribui automaticamente quatro jogadores por campo.</p><div id="playerInputs" class="players"></div></div>
     <div class="grid2"><button class="secondary" onclick="resetAll()">Limpar dados</button><button class="primary" onclick="startTournament()">Sortear e iniciar</button></div>
   </section>
@@ -46,13 +46,24 @@
 </main>
 <nav><button data-page="setup" class="on" onclick="showPage('setup')"><span class="ico">⚙️</span>Preparar</button><button data-page="games" onclick="showPage('games')"><span class="ico">🎾</span>Jogos</button><button data-page="ranking" onclick="showPage('ranking')"><span class="ico">🏆</span>Classificação</button></nav>
 <script>
-const defaultPlayers=[Array.from({length:16},(_,i)=>`Jogador ${i+2}`)];
-let state=JSON.parse(localStorage.getItem('padel4')||'null')||{players:defaultPlayers,rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};
+const defaultPlayers=Array.from({length:16},()=> '');
+let state=JSON.parse(localStorage.getItem('padel4')||'null')||{players:[...defaultPlayers],rounds:[],current:0,config:{start:'18:30',duration:15,break:3}};
+if(!state.rounds || state.rounds.length===0) state.players=[...defaultPlayers];
 function save(){localStorage.setItem('padel4',JSON.stringify(state))}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function updateExpectedEnd(){
+  const start=document.getElementById('startTime').value||'18:30';
+  const duration=Number(document.getElementById('duration').value||15);
+  const brk=Number(document.getElementById('breakTime').value||3);
+  const [h,m]=start.split(':').map(Number);
+  const total=h*60+m+(5*duration)+(4*brk);
+  document.getElementById('expectedEnd').textContent=`${String(Math.floor(total/60)%24).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
+}
 function timeFor(r){let [h,m]=state.config.start.split(':').map(Number);m+=r*(state.config.duration+state.config.break);h=(h+Math.floor(m/60))%24;m%=60;return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`}
-function init(){state.rounds.forEach(r=>r.forEach(g=>{if(!Object.prototype.hasOwnProperty.call(g,'tb'))g.tb=''}));if(!state.timers)state.timers={};save();startTimerLoop();document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
+function init(){state.rounds.forEach(r=>r.forEach(g=>{if(!Object.prototype.hasOwnProperty.call(g,'tb'))g.tb=''}));if(!state.timers)state.timers={};save();startTimerLoop();document.getElementById('startTime').value=state.config.start;document.getElementById('duration').value=state.config.duration;document.getElementById('breakTime').value=state.config.break;updateExpectedEnd();document.getElementById('playerInputs').innerHTML=state.players.map((p,i)=>`<div><label>Jogador ${i+1}</label><input value="${esc(p)}" oninput="state.players[${i}]=this.value;save()"></div>`).join('');renderAll()}
+['startTime','duration','breakTime'].forEach(id=>document.getElementById(id).addEventListener('change',updateExpectedEnd));
 function startTournament(){state.players=[...document.querySelectorAll('#playerInputs input')].map(x=>x.value.trim()).filter(Boolean);if(state.players.length!==16||new Set(state.players.map(x=>x.toLowerCase())).size!==16){alert('Introduza 16 nomes diferentes.');return}state.config={start:startTime.value||'18:30',duration:+duration.value,break:+breakTime.value};const p=shuffle(state.players);state.timers={};state.rounds=[Array.from({length:4},(_,c)=>({court:c+1,A:[p[c*4],p[c*4+1]],B:[p[c*4+2],p[c*4+3]],sa:'',sb:'',tb:''}))];state.current=0;save();showPage('games');renderAll()}
 function validScore(v){return v!==''&&Number.isInteger(Number(v))&&Number(v)>=0}
 function winner(g){if(!validScore(g.sa)||!validScore(g.sb))return null;const a=Number(g.sa),b=Number(g.sb);if(a>b)return'A';if(b>a)return'B';return g.tb==='A'||g.tb==='B'?g.tb:null}
@@ -167,7 +178,7 @@ function renderRanking(){
   rankingList.innerHTML=arr.map((s,i)=>`<div class="rank"><span class="pos">${i+1}</span><span>${esc(s.p)}<small class="note"> ${s.g}/5 jogos</small></span><b>${s.w}</b><b>${s.vpo}</b><span>${s.pf-s.pa>0?'+':''}${s.pf-s.pa}</span></div>`).join('');
 }
 function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.page===id));if(id==='games'&&!state.rounds.length)showPage('setup')}
-function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:defaultPlayers,rounds:[],timers:{},current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
+function resetAll(){if(confirm('Apagar torneio e resultados guardados neste dispositivo?')){localStorage.removeItem('padel4');state={players:[...defaultPlayers],rounds:[],timers:{},current:0,config:{start:'18:30',duration:15,break:3}};init();showPage('setup')}}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=17').then(r=>r.update());init();
 </script>
 </body></html>
