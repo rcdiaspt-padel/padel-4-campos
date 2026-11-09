@@ -1,2 +1,312 @@
-[InternetShortcut]
-URL=https://infraestruturasportugal-my.sharepoint.com/personal/rui_dias_infraestruturasdeportugal_pt/Documents/Documents/Copilot/Created/Padel-Sobe-e-Desce-v1.9/index.html
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#071a3a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Padel Sobe e Desce">
+  <title>Padel Sobe e Desce v1.9</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <style>
+    :root{--navy:#071a3a;--blue:#0d2b59;--lime:#a8ff00;--ink:#10213a;--muted:#637083;--bg:#f3f6fa;--card:#fff;--danger:#b42318;--gold:#8a5b00}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:94px}
+    header{background:linear-gradient(145deg,var(--navy),var(--blue));color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 20px;border-radius:0 0 26px 26px;position:sticky;top:0;z-index:2;box-shadow:0 8px 24px #071a3a33}
+    h1{font-size:22px;margin:0}.sub{opacity:.82;font-size:13px;margin-top:4px}.wrap{padding:14px;max-width:860px;margin:auto}
+    .card{background:var(--card);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 6px 20px #12305a12}.card h2{font-size:17px;margin:0 0 12px}.card h3{font-size:15px;margin:18px 0 7px}.card h3:first-child{margin-top:0}
+    label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:10px 0 5px}input,select{width:100%;font-size:16px;padding:12px;border:1px solid #d7dfea;border-radius:12px;background:#fff;color:var(--ink)}input:focus,select:focus{outline:3px solid #a8ff0055;border-color:#78b800}
+    button{border:0;border-radius:13px;padding:13px 14px;font-size:15px;font-weight:750;background:var(--navy);color:#fff;cursor:pointer}button.primary{background:var(--lime);color:var(--navy)}button.secondary{background:#e7edf5;color:var(--ink)}button.danger{background:#fee4e2;color:var(--danger)}button:disabled{opacity:.45;cursor:not-allowed}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.players{display:grid;grid-template-columns:1fr 1fr;gap:8px}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+    .tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 8px}.tab{white-space:nowrap;background:#e7edf5;color:var(--ink);padding:9px 12px}.tab.on{background:var(--navy);color:#fff}
+    .court{background:#fff;border:1px solid #dbe3ee;border-radius:16px;padding:13px;margin:11px 0;box-shadow:0 4px 14px #12305a0b}.court.champion-court{border:2px solid #c89b1d}.court-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.badge{font-size:12px;background:#ecfbd0;color:#345000;padding:5px 8px;border-radius:99px;font-weight:700}.badge.gold{background:#fff3c4;color:#704b00}
+    .teams{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.team{padding:10px;background:#f5f7fb;border-radius:12px;min-height:64px}.team b{display:block;font-size:12px;margin-bottom:4px}.team span{font-size:14px;display:block}.vs{font-size:12px;color:var(--muted);font-weight:800}.score{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.score input{text-align:center;font-weight:800;font-size:20px}
+    .ranking-wrap{overflow-x:auto}.rank{display:grid;grid-template-columns:40px minmax(150px,1fr) 42px 62px 58px 48px 52px;gap:7px;align-items:center;padding:10px 2px;border-bottom:1px solid #edf1f6;font-size:14px;min-width:520px}.rank.head{font-size:11px;color:var(--muted);font-weight:800}.rank.tie{background:#fff8e1}.pos{font-weight:900}.technical{display:inline-block;margin-left:6px;color:#8a5b00;font-size:11px;font-weight:800}.mobile-stats{display:none}.champion{border:1px solid #e2bd43;background:#fff8db}.champion h2{color:#624600}.champion-names{font-size:20px;font-weight:900;line-height:1.35}
+    .hidden{display:none!important}.note{font-size:12px;color:var(--muted);line-height:1.5}.ok{color:#2c6900;font-weight:700}.warn{color:#8a4b00;font-weight:700}.rules-list{padding-left:20px;margin:7px 0;color:#26384f;line-height:1.55}.rules-list li{margin:6px 0}.formula{background:#f5f7fb;border-left:4px solid var(--lime);padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.5}
+    nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dfe6ef;display:grid;grid-template-columns:repeat(4,1fr);padding:7px 6px calc(7px + env(safe-area-inset-bottom));z-index:3}nav button{background:#fff;color:var(--muted);padding:8px 4px;font-size:11px}nav button.on{color:var(--navy)}nav .ico{display:block;font-size:20px;margin-bottom:2px}
+    .timerbox{margin-top:12px;padding:14px;border-radius:16px;background:#071a3a;color:#fff;text-align:center}.timerlabel{font-size:12px;opacity:.8;font-weight:750;text-transform:uppercase;letter-spacing:.05em}.timerclock{font-size:42px;line-height:1.1;font-weight:850;font-variant-numeric:tabular-nums;margin:6px 0}.timerclock.warning{color:#ffd166}.timerclock.finished{color:#ff8a80}.timeractions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.timeractions button{padding:10px 8px}.timerhint{font-size:12px;opacity:.8;margin-top:6px}
+    @media(max-width:560px){.grid3{grid-template-columns:1fr}.players{grid-template-columns:1fr 1fr}.row.stack{display:block}.row.stack>*{margin-bottom:8px}.card{padding:14px}.teams{gap:5px}.team{padding:8px}.team span{font-size:13px}.ranking-wrap{overflow:visible}.rank{grid-template-columns:38px minmax(130px,1fr) 34px 54px;min-width:0}.rank>*:nth-child(5),.rank>*:nth-child(6),.rank>*:nth-child(7){display:none}.mobile-stats{display:block;margin-top:2px}}
+    @media(max-width:370px){.players{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}.timeractions{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Padel Sobe e Desce</h1>
+  <div id="appSubtitle" class="sub">4 campos · 16 jogadores · 5 rondas · v1.9</div>
+</header>
+<main class="wrap">
+  <section id="setup" class="page">
+    <div class="card">
+      <h2>Configuração</h2>
+      <div class="grid3">
+        <div><label for="courtCount">Número de campos</label><input id="courtCount" type="number" min="1" max="20" step="1" value="4" inputmode="numeric"></div>
+        <div><label for="startTime">Hora de início</label><input id="startTime" type="time" value="18:30"></div>
+        <div><label for="duration">Duração do jogo (min)</label><input id="duration" type="number" min="1" max="240" step="1" value="15" inputmode="numeric"></div>
+      </div>
+      <div class="grid2">
+        <div><label for="breakTime">Tempo de troca (min)</label><input id="breakTime" type="number" min="0" max="120" step="1" value="3" inputmode="numeric"></div>
+        <div><label>Planeamento</label><div class="formula"><b>Fim previsto:</b> <span id="expectedEnd">--:--</span><br><span id="scheduleSummary" class="note"></span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Inscrições</h2>
+      <p id="registrationNote" class="note">São necessários 16 nomes diferentes: quatro jogadores por campo.</p>
+      <div id="playerInputs" class="players"></div>
+    </div>
+    <div class="grid2"><button class="secondary" type="button" onclick="newTournament()">Novo torneio / limpar</button><button id="startTournamentBtn" class="primary" type="button" onclick="startTournament()">Sortear e iniciar</button></div>
+  </section>
+
+  <section id="games" class="page hidden">
+    <div id="roundTabs" class="tabs"></div>
+    <div id="roundInfo" class="card"></div>
+    <div id="courts"></div>
+    <button id="nextBtn" class="primary" style="width:100%" type="button" onclick="advanceRound()">Concluir ronda</button>
+  </section>
+
+  <section id="ranking" class="page hidden">
+    <div id="championCard" class="card champion hidden"></div>
+    <div class="card">
+      <h2>Classificação individual</h2>
+      <div class="ranking-wrap">
+        <div class="rank head"><span>Pos.</span><span>Jogador</span><span>V</span><span>Saldo</span><span>PM</span><span>CF</span><span>VPO</span></div>
+        <div id="rankingList"></div>
+      </div>
+      <p class="note"><b>Ordem competitiva:</b> vitórias, saldo de pontos, pontos marcados, campo final e vitórias por ponto de ouro. Igualdade em todos estes critérios = empate técnico.</p>
+    </div>
+  </section>
+
+  <section id="rules" class="page hidden">
+    <div class="card">
+      <h2>Regras — Padel Sobe e Desce v1.9</h2>
+      <h3>Formato e configuração</h3>
+      <ul class="rules-list">
+        <li>O torneio tem <b>5 rondas</b> e exatamente <b>4 jogadores por campo</b>. O número de jogadores é, por isso, quatro vezes o número de campos.</li>
+        <li>O organizador define entre 1 e 20 campos, a hora de início, a duração inteira de cada jogo (12 minutos ou qualquer valor válido entre 1 e 240) e o tempo inteiro de troca (0 a 120 minutos).</li>
+        <li>A hora prevista de fim é calculada por: <b>5 × duração dos jogos + 4 × tempo de troca</b>. Não é somado tempo de troca depois da última ronda.</li>
+        <li>Ao criar um novo torneio, a lista de jogadores fica vazia. Todos os nomes têm de estar preenchidos e ser diferentes.</li>
+      </ul>
+      <h3>Resultados e ponto de ouro</h3>
+      <ul class="rules-list">
+        <li>Em cada campo registam-se pontos inteiros não negativos para as duas equipas. Ganha a equipa com mais pontos.</li>
+        <li>Se o resultado terminar empatado, é obrigatório indicar a equipa vencedora do <b>ponto de ouro</b>. O marcador mantém-se empatado; a vitória e uma vitória por ponto de ouro são atribuídas aos dois jogadores vencedores.</li>
+        <li>Uma ronda só pode ser concluída quando todos os campos tiverem vencedor.</li>
+      </ul>
+      <h3>Sobe e desce e rotação</h3>
+      <ul class="rules-list">
+        <li>A 1.ª ronda é sorteada. Nas rondas 2 a 4, a dupla vencedora sobe um campo e a dupla vencida desce um campo; a dupla vencedora do Campo 1 e a dupla vencida do último campo permanecem no limite.</li>
+        <li>Depois do movimento, as duplas são desfeitas. Entre as três divisões possíveis dos quatro jogadores, o algoritmo escolhe lexicograficamente a que: (1) minimiza o total de repetições de parceiros; (2) minimiza a maior repetição individual de parceria; (3) minimiza o total de repetições de adversários; (4) minimiza a maior repetição entre adversários; e (5) minimiza a diferença entre as frequências de confrontos adversários. Se ainda houver igualdade, aplica a ordem estável das combinações.</li>
+        <li>A minimização é a melhor possível dentro do grupo de quatro jogadores que chegou a cada campo pelo sobe e desce. A 5.ª ronda obedece à regra final abaixo e prevalece sobre a otimização de parceiros.</li>
+      </ul>
+      <h3>Classificação individual</h3>
+      <ul class="rules-list">
+        <li>A classificação é ordenada por: <b>1.º vitórias; 2.º saldo de pontos; 3.º pontos marcados; 4.º campo final (Campo 1 é superior); 5.º vitórias por ponto de ouro</b>.</li>
+        <li>O saldo de pontos é a diferença entre pontos marcados e sofridos. O campo final é o campo do último jogo concluído pelo jogador.</li>
+        <li>Se todos os cinco critérios competitivos forem iguais, é assinalado <b>empate técnico</b> e os jogadores partilham a mesma posição. Para ordenar a lista e formar os grupos da última ronda sem acrescentar um critério competitivo, usa-se apenas como desempate operacional a ordem do sorteio inicial.</li>
+      </ul>
+      <h3>Organização completa da última ronda</h3>
+      <ul class="rules-list">
+        <li>Depois da 4.ª ronda calcula-se a classificação provisória pelos critérios anteriores.</li>
+        <li>Os classificados do 1.º ao 4.º vão para o Campo 1; do 5.º ao 8.º para o Campo 2; e assim sucessivamente, em grupos consecutivos de quatro.</li>
+        <li>Em cada grupo, a equipa A é formada pelo <b>1.º + 4.º</b> e a equipa B pelo <b>2.º + 3.º</b>, considerando a ordem desse grupo.</li>
+        <li>A dupla que vencer a última ronda no <b>Campo 1</b> é declarada vencedora do torneio, incluindo quando a decisão resulta de ponto de ouro.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+<nav aria-label="Menu principal">
+  <button data-page="setup" class="on" type="button" onclick="showPage('setup')"><span class="ico">●</span>Preparar</button>
+  <button data-page="games" type="button" onclick="showPage('games')"><span class="ico">▶</span>Jogos</button>
+  <button data-page="ranking" type="button" onclick="showPage('ranking')"><span class="ico">★</span>Classificação</button>
+  <button data-page="rules" type="button" onclick="showPage('rules')"><span class="ico">i</span>Regras</button>
+</nav>
+<script>
+'use strict';
+const VERSION='1.9';
+const STORAGE_KEY='padel4';
+const TOTAL_ROUNDS=5;
+const DEFAULT_CONFIG={courts:4,start:'18:30',duration:15,break:3};
+const $=id=>document.getElementById(id);
+
+function emptyPlayers(courts){return Array.from({length:courts*4},()=> '');}
+function baseState(){return{version:VERSION,players:emptyPlayers(DEFAULT_CONFIG.courts),startOrder:[],rounds:[],timers:{},current:0,config:{...DEFAULT_CONFIG}};}
+function positiveInt(value,fallback,min,max){const n=Number(value);return Number.isInteger(n)&&n>=min&&n<=max?n:fallback;}
+function loadState(){
+  try{
+    const loaded=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
+    if(!loaded||typeof loaded!=='object')return baseState();
+    const inferredCourts=loaded.config&&loaded.config.courts||loaded.rounds&&loaded.rounds[0]&&loaded.rounds[0].length||Math.max(1,Math.floor((loaded.players||[]).length/4))||4;
+    const courts=positiveInt(inferredCourts,4,1,20);
+    const state={
+      version:VERSION,
+      players:Array.isArray(loaded.players)?loaded.players.map(String):emptyPlayers(courts),
+      startOrder:Array.isArray(loaded.startOrder)?loaded.startOrder.map(String):[],
+      rounds:Array.isArray(loaded.rounds)?loaded.rounds:[],
+      timers:loaded.timers&&typeof loaded.timers==='object'?loaded.timers:{},
+      current:positiveInt(loaded.current,0,0,TOTAL_ROUNDS-1),
+      config:{courts,start:loaded.config&&/^\d{2}:\d{2}$/.test(loaded.config.start)?loaded.config.start:'18:30',duration:positiveInt(loaded.config&&loaded.config.duration,15,1,240),break:positiveInt(loaded.config&&loaded.config.break,3,0,120)}
+    };
+    if(!state.startOrder.length&&state.players.length)state.startOrder=[...state.players];
+    state.rounds.forEach(round=>round.forEach(game=>{if(!Object.prototype.hasOwnProperty.call(game,'tb'))game.tb='';}));
+    if(!state.rounds.length){state.players=emptyPlayers(courts);state.startOrder=[];state.current=0;state.timers={};}
+    return state;
+  }catch(error){console.warn('Não foi possível recuperar os dados guardados.',error);return baseState();}
+}
+let state=loadState();
+function save(){state.version=VERSION;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function esc(value){return String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+function shuffle(values){const copy=[...values];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}return copy;}
+function pairKey(a,b){return[a,b].sort((x,y)=>x.localeCompare(y,'pt')).join('\u0001');}
+function validScore(value){return value!==''&&Number.isInteger(Number(value))&&Number(value)>=0;}
+function winner(game){if(!validScore(game.sa)||!validScore(game.sb))return null;const a=Number(game.sa),b=Number(game.sb);if(a>b)return'A';if(b>a)return'B';return game.tb==='A'||game.tb==='B'?game.tb:null;}
+function gameStatus(game){if(!validScore(game.sa)||!validScore(game.sb))return'Resultado por preencher';if(Number(game.sa)===Number(game.sb)&&!winner(game))return'Falta confirmar o ponto de ouro';const win=winner(game);return win?`Vencedor ${win}${Number(game.sa)===Number(game.sb)?' · ponto de ouro':''}`:'Por concluir';}
+function newGame(court,A,B){return{court,A:[...A],B:[...B],sa:'',sb:'',tb:''};}
+function lexCompare(a,b){for(let i=0;i<Math.max(a.length,b.length);i++){const d=(a[i]||0)-(b[i]||0);if(d)return d;}return 0;}
+
+function updateSubtitle(){const courts=positiveInt($('courtCount').value,state.config.courts,1,20);$('appSubtitle').textContent=`${courts} campo${courts===1?'':'s'} · ${courts*4} jogadores · ${TOTAL_ROUNDS} rondas · v${VERSION}`;}
+function formatClock(totalMinutes,showDay=false){const normalized=((totalMinutes%1440)+1440)%1440;const value=`${String(Math.floor(normalized/60)).padStart(2,'0')}:${String(normalized%60).padStart(2,'0')}`;const days=Math.floor(totalMinutes/1440);return showDay&&days>0?`${value} (+${days} dia${days===1?'':'s'})`:value;}
+function readConfigInputs(){return{courts:positiveInt($('courtCount').value,state.config.courts||4,1,20),start:/^\d{2}:\d{2}$/.test($('startTime').value)?$('startTime').value:'18:30',duration:positiveInt($('duration').value,state.config.duration||15,1,240),break:positiveInt($('breakTime').value,state.config.break??3,0,120)};}
+function updateExpectedEnd(){
+  const config=readConfigInputs();const[h,m]=config.start.split(':').map(Number);const minutes=(TOTAL_ROUNDS*config.duration)+((TOTAL_ROUNDS-1)*config.break);$('expectedEnd').textContent=formatClock(h*60+m+minutes,true);$('scheduleSummary').textContent=`${TOTAL_ROUNDS} jogos × ${config.duration} min + ${TOTAL_ROUNDS-1} trocas × ${config.break} min = ${minutes} min`;
+  updateSubtitle();
+}
+function resizePlayerInputs(){
+  if(state.rounds.length){$('courtCount').value=state.config.courts;updateExpectedEnd();return;}
+  const courts=positiveInt($('courtCount').value,4,1,20),needed=courts*4;const current=[...document.querySelectorAll('#playerInputs input')].map(input=>input.value);
+  state.config.courts=courts;state.players=Array.from({length:needed},(_,index)=>current[index]??state.players[index]??'');renderPlayerInputs();updateExpectedEnd();save();
+}
+function renderPlayerInputs(){
+  const count=positiveInt($('courtCount').value,state.config.courts,1,20)*4;
+  if(state.players.length!==count&&!state.rounds.length)state.players=Array.from({length:count},(_,index)=>state.players[index]||'');
+  $('registrationNote').textContent=`São necessários ${count} nomes diferentes: quatro jogadores por campo.`;
+  const locked=state.rounds.length>0;
+  $('playerInputs').innerHTML=state.players.slice(0,count).map((player,index)=>`<div><label for="player${index}">Jogador ${index+1}</label><input id="player${index}" value="${esc(player)}" autocomplete="off" ${locked?'disabled':''} oninput="state.players[${index}]=this.value;save()"></div>`).join('');
+}
+function timeFor(roundIndex){const[h,m]=state.config.start.split(':').map(Number);return formatClock(h*60+m+roundIndex*(state.config.duration+state.config.break));}
+function roundEnd(roundIndex){const[h,m]=state.config.start.split(':').map(Number);return formatClock(h*60+m+roundIndex*(state.config.duration+state.config.break)+state.config.duration);}
+
+function startTournament(){
+  const config=readConfigInputs();const players=[...document.querySelectorAll('#playerInputs input')].map(input=>input.value.trim());const expected=config.courts*4;
+  if(players.length!==expected||players.some(name=>!name)){alert(`Introduza os ${expected} nomes.`);return;}
+  if(new Set(players.map(name=>name.toLocaleLowerCase('pt-PT'))).size!==expected){alert('Todos os nomes têm de ser diferentes.');return;}
+  const order=shuffle(players);state={version:VERSION,players:[...players],startOrder:[...order],rounds:[],timers:{},current:0,config};
+  state.rounds=[Array.from({length:config.courts},(_,court)=>newGame(court+1,[order[court*4],order[court*4+1]],[order[court*4+2],order[court*4+3]]))];
+  save();applyConfigToForm();showPage('games');renderAll();
+}
+function newTournament(){
+  const hasData=state.rounds.length||state.players.some(name=>String(name).trim());
+  if(hasData&&!confirm('Criar um novo torneio? Serão apagados nomes, jogos e resultados guardados neste dispositivo.'))return;
+  const config=readConfigInputs();state={version:VERSION,players:emptyPlayers(config.courts),startOrder:[],rounds:[],timers:{},current:0,config};save();applyConfigToForm();renderPlayerInputs();renderAll();showPage('setup');
+}
+
+function completedHistory(rounds){
+  const partner=new Map(),opponent=new Map();const add=(map,key)=>map.set(key,(map.get(key)||0)+1);
+  rounds.forEach(round=>round.forEach(game=>{
+    if(!game||!game.A||!game.B)return;
+    add(partner,pairKey(game.A[0],game.A[1]));add(partner,pairKey(game.B[0],game.B[1]));
+    game.A.forEach(a=>game.B.forEach(b=>add(opponent,pairKey(a,b))));
+  }));
+  return{partner,opponent};
+}
+function pairingScore(A,B,history){
+  const partnershipCounts=[history.partner.get(pairKey(A[0],A[1]))||0,history.partner.get(pairKey(B[0],B[1]))||0];
+  const oppositionCounts=[];A.forEach(a=>B.forEach(b=>oppositionCounts.push(history.opponent.get(pairKey(a,b))||0)));
+  const range=Math.max(...oppositionCounts)-Math.min(...oppositionCounts);
+  return[partnershipCounts[0]+partnershipCounts[1],Math.max(...partnershipCounts),oppositionCounts.reduce((sum,value)=>sum+value,0),Math.max(...oppositionCounts),range];
+}
+function optimiseTeams(players,history){
+  const p=players;const candidates=[[[p[0],p[1]],[p[2],p[3]]],[[p[0],p[2]],[p[1],p[3]]],[[p[0],p[3]],[p[1],p[2]]]];
+  return candidates.map((teams,index)=>({teams,index,score:pairingScore(teams[0],teams[1],history)})).sort((a,b)=>lexCompare(a.score,b.score)||a.index-b.index)[0].teams;
+}
+function regularNextRound(){
+  const previous=state.rounds[state.rounds.length-1],courts=state.config.courts,up=[],down=[];
+  previous.forEach(game=>{const win=winner(game);up.push(win==='A'?game.A:game.B);down.push(win==='A'?game.B:game.A);});
+  const groups=[];
+  if(courts===1)groups.push([...up[0],...down[0]]);
+  else for(let court=0;court<courts;court++){
+    if(court===0)groups.push([...up[0],...up[1]]);
+    else if(court===courts-1)groups.push([...down[court-1],...down[court]]);
+    else groups.push([...down[court-1],...up[court+1]]);
+  }
+  const history=completedHistory(state.rounds);return groups.map((group,index)=>{const[A,B]=optimiseTeams(group,history);return newGame(index+1,A,B);});
+}
+function competitiveVector(stat){return[stat.w,stat.diff,stat.pf,-stat.c,stat.vpo];}
+function compareStats(a,b){return b.w-a.w||b.diff-a.diff||b.pf-a.pf||a.c-b.c||b.vpo-a.vpo||a.order-b.order;}
+function sameCompetitiveRank(a,b){return a.w===b.w&&a.diff===b.diff&&a.pf===b.pf&&a.c===b.c&&a.vpo===b.vpo;}
+function computeStats(roundCount=state.rounds.length){
+  const orderMap=new Map(state.startOrder.map((name,index)=>[name,index]));const stats=Object.fromEntries(state.players.map((name,index)=>[name,{p:name,g:0,w:0,vpo:0,l:0,pf:0,pa:0,diff:0,c:Infinity,order:orderMap.has(name)?orderMap.get(name):index}]));
+  state.rounds.slice(0,roundCount).forEach(round=>round.forEach(game=>{
+    const win=winner(game);if(!win)return;const tied=Number(game.sa)===Number(game.sb);[...game.A,...game.B].forEach(name=>{if(stats[name]){stats[name].g++;stats[name].c=game.court;}});
+    game.A.forEach(name=>{if(!stats[name])return;stats[name].pf+=Number(game.sa);stats[name].pa+=Number(game.sb);if(win==='A'){stats[name].w++;if(tied)stats[name].vpo++;}else stats[name].l++;});
+    game.B.forEach(name=>{if(!stats[name])return;stats[name].pf+=Number(game.sb);stats[name].pa+=Number(game.sa);if(win==='B'){stats[name].w++;if(tied)stats[name].vpo++;}else stats[name].l++;});
+  }));
+  return Object.values(stats).map(stat=>({...stat,diff:stat.pf-stat.pa})).sort(compareStats);
+}
+function finalRound(){
+  const ranking=computeStats(TOTAL_ROUNDS-1);return Array.from({length:state.config.courts},(_,court)=>{const group=ranking.slice(court*4,court*4+4);return newGame(court+1,[group[0].p,group[3].p],[group[1].p,group[2].p]);});
+}
+function generateNextRound(){return state.rounds.length===TOTAL_ROUNDS-1?finalRound():regularNextRound();}
+function truncateAfter(roundIndex){
+  state.rounds=state.rounds.slice(0,roundIndex+1);Object.keys(state.timers).forEach(key=>{if(Number(key)>roundIndex)delete state.timers[key];});state.current=roundIndex;
+}
+function approveHistoricalEdit(roundIndex){if(roundIndex>=state.rounds.length-1)return true;if(!confirm('Alterar esta ronda invalida e apaga todas as rondas seguintes. Continuar?'))return false;truncateAfter(roundIndex);return true;}
+function setScore(roundIndex,courtIndex,key,value){
+  const game=state.rounds[roundIndex]&&state.rounds[roundIndex][courtIndex];if(!game)return;if(String(game[key])===String(value))return;
+  if(!approveHistoricalEdit(roundIndex)){renderAll();return;}game[key]=value;if(validScore(game.sa)&&validScore(game.sb)&&Number(game.sa)!==Number(game.sb))game.tb='';save();renderAll();
+}
+function chooseGold(roundIndex,courtIndex,team){
+  const game=state.rounds[roundIndex]&&state.rounds[roundIndex][courtIndex];if(!game||!validScore(game.sa)||!validScore(game.sb)||Number(game.sa)!==Number(game.sb)||game.tb===team)return;
+  if(!approveHistoricalEdit(roundIndex)){renderAll();return;}game.tb=team;save();renderAll();
+}
+
+let timerLoop=null,audioCtx=null;
+function gameSeconds(){return Math.max(60,Number(state.config.duration||15)*60);}
+function getTimer(roundIndex){if(!state.timers)state.timers={};if(!state.timers[roundIndex])state.timers[roundIndex]={remaining:gameSeconds(),endAt:null,running:false,finished:false,lastGameAlerted:false};if(state.timers[roundIndex].lastGameAlerted===undefined)state.timers[roundIndex].lastGameAlerted=false;return state.timers[roundIndex];}
+function timerRemaining(roundIndex){const timer=getTimer(roundIndex);if(timer.running&&timer.endAt)return Math.max(0,Math.ceil((timer.endAt-Date.now())/1000));return Math.max(0,Number(timer.remaining??gameSeconds()));}
+function formatTimer(seconds){return`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`;}
+function ensureAudio(){try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}catch(error){}}
+function beep(frequency=880,duration=.25,volume=.16,delay=0){try{ensureAudio();if(!audioCtx)return;const oscillator=audioCtx.createOscillator(),gain=audioCtx.createGain(),time=audioCtx.currentTime+delay;oscillator.connect(gain);gain.connect(audioCtx.destination);oscillator.frequency.value=frequency;gain.gain.setValueAtTime(volume,time);gain.gain.exponentialRampToValueAtTime(.001,time+duration);oscillator.start(time);oscillator.stop(time+duration);}catch(error){}}
+function testSound(){ensureAudio();beep(1040,.32,.20,0);beep(1040,.32,.20,.48);beep(1320,.55,.22,.96);if(navigator.vibrate)navigator.vibrate([250,140,250,140,450]);}
+function lastGameAlert(roundIndex){const timer=getTimer(roundIndex);if(timer.lastGameAlerted)return;timer.lastGameAlerted=true;save();testSound();}
+function finishTimer(roundIndex){const timer=getTimer(roundIndex);if(timer.finished)return;timer.remaining=0;timer.endAt=null;timer.running=false;timer.finished=true;save();if(navigator.vibrate)navigator.vibrate([400,180,400]);beep(700,.7,.20,0);beep(520,.9,.20,.8);}
+function startRoundTimer(roundIndex){ensureAudio();const timer=getTimer(roundIndex);let left=timerRemaining(roundIndex);if(left<=0)left=gameSeconds();timer.remaining=left;timer.endAt=Date.now()+left*1000;timer.running=true;timer.finished=false;if(left>240)timer.lastGameAlerted=false;save();renderTimer(roundIndex);}
+function pauseRoundTimer(roundIndex){const timer=getTimer(roundIndex);timer.remaining=timerRemaining(roundIndex);timer.endAt=null;timer.running=false;save();renderTimer(roundIndex);}
+function resetRoundTimer(roundIndex){state.timers[roundIndex]={remaining:gameSeconds(),endAt:null,running:false,finished:false,lastGameAlerted:false};save();renderTimer(roundIndex);}
+function renderTimer(roundIndex){
+  const element=$('roundTimer');if(!element||state.current!==roundIndex)return;const timer=getTimer(roundIndex),left=timerRemaining(roundIndex);if(timer.running&&left<=0)finishTimer(roundIndex);const current=getTimer(roundIndex),seconds=timerRemaining(roundIndex);if(current.running&&seconds<=240&&seconds>0&&!current.lastGameAlerted)lastGameAlert(roundIndex);
+  const clock=$('timerClock'),status=$('timerStatus'),start=$('timerStart');if(clock){clock.textContent=formatTimer(seconds);clock.className=`timerclock ${seconds===0?'finished':seconds<=60?'warning':''}`;}if(status)status.textContent=seconds===0?`Fim dos ${state.config.duration} min · ${state.config.break} min para resultado e troca`:current.running&&seconds<=240?'ALERTA · últimos 4 minutos':current.running?'Jogo em curso':seconds===gameSeconds()?'Pronto para iniciar':'Cronómetro em pausa';if(start){start.textContent=current.running?'Em curso':'Iniciar';start.disabled=current.running;}
+}
+function startTimerLoop(){if(timerLoop)return;timerLoop=setInterval(()=>{if(state.rounds.length)renderTimer(state.current);},250);}
+
+function renderTabs(){$('roundTabs').innerHTML=state.rounds.map((round,index)=>`<button class="tab ${index===state.current?'on':''}" type="button" onclick="state.current=${index};save();renderAll()">Ronda ${index+1}</button>`).join('');}
+function renderRound(){
+  if(!state.rounds.length){$('courts').innerHTML='<div class="card"><p class="note">Prepare e inicie o torneio.</p></div>';$('roundInfo').innerHTML='<b>Torneio ainda não iniciado</b>';$('nextBtn').disabled=true;return;}
+  const roundIndex=state.current,isFinal=roundIndex===TOTAL_ROUNDS-1;$('roundInfo').innerHTML=`<div class="row"><div><b>Ronda ${roundIndex+1} de ${TOTAL_ROUNDS}${isFinal?' · ronda final':''}</b><div class="note">${timeFor(roundIndex)}–${roundEnd(roundIndex)}</div></div><div class="badge">${state.config.courts} campo${state.config.courts===1?'':'s'}</div></div>${isFinal?'<p class="note"><b>Grupos pela classificação provisória:</b> 1.º+4.º contra 2.º+3.º. A dupla vencedora do Campo 1 vence o torneio.</p>':''}<div class="timerbox" id="roundTimer"><div class="timerlabel" id="timerStatus">Pronto para iniciar</div><div class="timerclock" id="timerClock">${formatTimer(timerRemaining(roundIndex))}</div><div class="timerhint">Jogo: ${state.config.duration} min · alerta sonoro nos 4 min finais · troca: ${state.config.break} min</div><div class="timeractions"><button id="timerStart" class="primary" type="button" onclick="startRoundTimer(${roundIndex})">Iniciar</button><button class="secondary" type="button" onclick="pauseRoundTimer(${roundIndex})">Pausa</button><button class="danger" type="button" onclick="resetRoundTimer(${roundIndex})">Repor</button><button class="secondary" type="button" onclick="testSound()">🔊 Testar som</button></div></div>`;
+  $('courts').innerHTML=state.rounds[roundIndex].map((game,index)=>{
+    const tied=validScore(game.sa)&&validScore(game.sb)&&Number(game.sa)===Number(game.sb);const gold=tied?`<div class="gold"><label>Vencedor do ponto de ouro</label><div class="grid2"><button type="button" class="${game.tb==='A'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${index},'A')">Equipa A<br><small>${esc(game.A.join(' / '))}</small></button><button type="button" class="${game.tb==='B'?'primary':'secondary'}" onclick="chooseGold(${roundIndex},${index},'B')">Equipa B<br><small>${esc(game.B.join(' / '))}</small></button></div><p class="note">Seleção atual: ${game.tb?`Equipa ${game.tb}`:'nenhuma'}. O resultado mantém-se ${game.sa}–${game.sb}.</p></div>`:'';
+    return`<div class="court ${isFinal&&game.court===1?'champion-court':''}"><div class="court-head"><b>Campo ${game.court}</b><span class="badge ${isFinal&&game.court===1?'gold':''}">${gameStatus(game)}</span></div><div class="teams"><div class="team"><b>Equipa A</b><span>${esc(game.A[0])}</span><span>${esc(game.A[1])}</span></div><div class="vs">VS</div><div class="team"><b>Equipa B</b><span>${esc(game.B[0])}</span><span>${esc(game.B[1])}</span></div></div><div class="score"><input aria-label="Pontos da Equipa A no Campo ${game.court}" type="number" min="0" step="1" inputmode="numeric" placeholder="A" value="${esc(game.sa)}" onchange="setScore(${roundIndex},${index},'sa',this.value)"><input aria-label="Pontos da Equipa B no Campo ${game.court}" type="number" min="0" step="1" inputmode="numeric" placeholder="B" value="${esc(game.sb)}" onchange="setScore(${roundIndex},${index},'sb',this.value)"></div>${gold}</div>`;
+  }).join('');updateNext();renderTimer(roundIndex);
+}
+function updateNext(){if(!state.rounds.length)return;const pending=state.rounds[state.current].filter(game=>!winner(game));$('nextBtn').disabled=pending.length>0;$('nextBtn').textContent=pending.length?`Ronda por concluir · ${pending.length} campo${pending.length===1?'':'s'}`:state.current===TOTAL_ROUNDS-1?'Concluir torneio':state.current<state.rounds.length-1?'Abrir ronda seguinte':'Concluir ronda e gerar a seguinte';}
+function advanceRound(){
+  const round=state.rounds[state.current];if(!round.every(winner)){const missing=round.filter(game=>!winner(game)).map(game=>`Campo ${game.court}: ${gameStatus(game)}`).join('\n');alert(`Ronda ${state.current+1} por concluir:\n${missing}`);return;}
+  if(state.current===TOTAL_ROUNDS-1){save();renderRanking();showPage('ranking');return;}
+  if(state.rounds[state.current+1]){state.current++;save();renderAll();return;}
+  state.rounds.push(generateNextRound());state.current++;save();renderAll();
+}
+function tournamentChampion(){if(state.rounds.length<TOTAL_ROUNDS)return null;const game=state.rounds[TOTAL_ROUNDS-1]&&state.rounds[TOTAL_ROUNDS-1][0],win=game&&winner(game);return win?{players:win==='A'?game.A:game.B,gold:Number(game.sa)===Number(game.sb)}:null;}
+function renderRanking(){
+  const ranking=computeStats();let previous=null,position=0;$('rankingList').innerHTML=ranking.map((stat,index)=>{const tied=previous&&sameCompetitiveRank(previous,stat);if(!tied)position=index+1;const next=ranking[index+1],technical=Boolean(tied||(next&&sameCompetitiveRank(stat,next)));const court=Number.isFinite(stat.c)?stat.c:'—';const html=`<div class="rank ${technical?'tie':''}"><span class="pos">${position}</span><span>${esc(stat.p)}${technical?'<span class="technical">EMPATE TÉCNICO</span>':''}<small class="note"> ${stat.g}/${TOTAL_ROUNDS} jogos</small><small class="note mobile-stats">PM ${stat.pf} · CF ${court} · VPO ${stat.vpo}</small></span><b>${stat.w}</b><span>${stat.diff>0?'+':''}${stat.diff}</span><span>${stat.pf}</span><span>${court}</span><span>${stat.vpo}</span></div>`;previous=stat;return html;}).join('');
+  const champion=tournamentChampion();$('championCard').classList.toggle('hidden',!champion);$('championCard').innerHTML=champion?`<h2>★ Dupla vencedora do torneio</h2><div class="champion-names">${esc(champion.players[0])} / ${esc(champion.players[1])}</div><p class="note">Vencedores da última ronda no Campo 1${champion.gold?', por ponto de ouro':''}.</p>`:'';
+}
+function renderAll(){renderTabs();renderRound();renderRanking();updateSubtitle();}
+function showPage(id){document.querySelectorAll('.page').forEach(page=>page.classList.toggle('hidden',page.id!==id));document.querySelectorAll('nav button').forEach(button=>button.classList.toggle('on',button.dataset.page===id));if(id==='games'&&!state.rounds.length)showPage('setup');if(id==='ranking')renderRanking();window.scrollTo({top:0,behavior:'smooth'});}
+function applyConfigToForm(){$('courtCount').value=state.config.courts;$('startTime').value=state.config.start;$('duration').value=state.config.duration;$('breakTime').value=state.config.break;const locked=state.rounds.length>0;['courtCount','startTime','duration','breakTime'].forEach(id=>$(id).disabled=locked);$('startTournamentBtn').disabled=locked;updateExpectedEnd();renderPlayerInputs();}
+function init(){
+  applyConfigToForm();['startTime','duration','breakTime'].forEach(id=>$(id).addEventListener('input',updateExpectedEnd));$('courtCount').addEventListener('input',resizePlayerInputs);save();startTimerLoop();renderAll();
+}
+if('serviceWorker'in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js?v=19').then(registration=>registration.update()).catch(()=>{});
+init();
+</script>
+</body>
+</html>
